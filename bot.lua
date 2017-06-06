@@ -1,7 +1,7 @@
 redis = (loadfile "./redis.lua")()
 redis = redis.connect('127.0.0.1', 6379)
-redis:select(0)
-ADMIN =  123456789 --yourid
+redis:select(1)
+ADMIN =  65761134
 
 function ok_cb(extra, success, result)
 end
@@ -80,9 +80,9 @@ function set_bot_photo(receiver, success, result)
 		local file = 'bot.jpg'
 		os.rename(result, file)
 		set_profile_photo(file, ok_cb, false)
-		send_msg(receiver, 'Photo changed!', ok_cb, false)
+		send_msg(receiver, 'Photo changed/', ok_cb, false)
 	else
-		send_msg(receiver, 'Failed, please try again!', ok_cb, false)
+		send_msg(receiver, 'Failed, please try again/', ok_cb, false)
 	end
 end
 
@@ -151,10 +151,10 @@ function on_msg_receive (msg)
 		end
 		if is_Naji(msg.from.id) then
 			find_link(text)
-			if text:match("^(!setphoto)$") and msg.reply_id then
+			if text:match("^(/setphoto)$") and msg.reply_id then
 				load_photo(msg.reply_id, set_bot_photo, receiver)
-			elseif text:match("^(!markread) (.*)$") then
-				local matche = text:match("^!markread (.*)$")
+			elseif text:match("^(/markread) (.*)$") then
+				local matche = text:match("^/markread (.*)$")
 				if matche == "on" then
 					redis:set("bot:markread", "on")
 					send_msg(receiver, "Mark read > on", ok_cb, false)
@@ -162,85 +162,85 @@ function on_msg_receive (msg)
 					redis:del("bot:markread")
 					send_msg(receiver, "Mark read > off", ok_cb, false)
 				end
-			elseif text:match("^(!setname) (.*)") then
-				local matche = text:match("^!setname (.*)")
+			elseif text:match("^(/setname) (.*)") then
+				local matche = text:match("^/setname (.*)")
 				set_profile_name(matche,ok_cb, false)
 				send_msg(receiver, "Name changed", ok_cb, false)
-			elseif text:match("^(!echo) (.*)") then
-				local matche = text:match("^!echo (.*)")
+			elseif text:match("^(/echo) (.*)") then
+				local matche = text:match("^/echo (.*)")
 				send_msg(receiver, matche, ok_cb, false)
-			elseif text:match("^(!text) (%d+) (.*)") then
-				local matches = {text:match("^!text (%d+) (.*)")}
+			elseif text:match("^(/text) (%d+) (.*)") then
+				local matches = {text:match("^/text (%d+) (.*)")}
 				send_msg("user#id"..matches[1],matches[2], ok_cb, false)
 				send_msg(receiver, "Message has been sent", ok_cb, false)
-			elseif text:match("^(!help)$") then
+			elseif text:match("^(/help)$") then
 				local text =[[💢 متن راهنما 💢
 
-!pm [Id] [Text]
+/pm [Id] [Text]
 📩 ارسال  text وارد شده به فردی با id موردنظر
 
-!bc[all|pv|gp|sgp] [text]
+/bc[all|pv|gp|sgp] [text]
 📤 ارسال text وارد شده به مورد خوسته شده
 
-!fwd[all|pv|gp|sgp]  {reply on msg}
+/fwd[all|pv|gp|sgp]  {reply on msg}
 📨 فروارد پیام ریپلای شده به مورد خواسته شده
 
-!block [Id]
+/block [Id]
 ⚫️ بلاک کردن فرد با id وارد شده
 
-!unblock [id]
+/unblock [id]
 ⚪️ انبلاک کردن فرد  با id وارد شده
 
-!addcontact [phone] [FirstName] [LastName]
+/addcontact [phone] [FirstName] [LastName]
 ➕ اضافه کردن یک کانتکت
 
-!delcontact [phone] [FirstName] [LastName]
+/delcontact [phone] [FirstName] [LastName]
 ➖ حذف کردن یک کانتکت
 
-!sendcontact [phone] [FirstName] [LastName]
+/sendcontact [phone] [FirstName] [LastName]
 ↩️ ارسال یک کانتکت
 
-!contactlist
+/contactlist
 📄 دریافت لیست کانتکت ها
 
-!markread [on]|[off]
+/markread [on]|[off]
 🔘 روشن و خاموش کردن تیک مارک رید
 
-!autojoin [on]|[off]
+/autojoin [on]|[off]
 🔲 روشن و خاموش کردن شناسایی لینک و عضویت
 
-!setphoto {on reply photo}
+/setphoto {on reply photo}
 🌠 ست کردن پروفایل ربات
 
-!stats
+/stats
 📈 دریافت آمار ربات
 
-!addmember
+/addmember
 📌 اضافه کردن کانتکت های ربات به گروه
 
-!echo [text]
+/echo [text]
 🔁 برگرداندن text وارد شده
 
-!exportlink
+/exportlink
 📦 دریافت لینک های ذخیره شده
-!addcontact [on]|[off]
+/addcontact [on]|[off]
 ☑️ خاموش و روشن کردن افزودن خودکار مخاطبین
 
-!setpm [text]
+/setpm [text]
 📍تنظیم پیام ادشدن کانتکت
 
-!addsudo [id]
+/addsudo [id]
 👮 اضافه کردن سودو
 
-!remsudo [id]
+/remsudo [id]
 ✖️ حذف کردن سودو
 
 ➖➖➖➖ا➖➖➖➖
 "دانش بدون تکامل اخلاقی خطرناک و نابود کننده است."
 ➖➖➖➖ا➖➖➖➖]]
 				send_msg(receiver, text, ok_cb, false)
-			elseif text:match("^(!autojoin) (.*)$") then
-				local matche = text:match("^!autojoin (.*)$")
+			elseif text:match("^(/autojoin) (.*)$") then
+				local matche = text:match("^/autojoin (.*)$")
 				if matche == "on" then
 					redis:set("selfbot:link", true)
 					send_msg(receiver, "Automatic joining is ON", ok_cb, false)
@@ -248,8 +248,8 @@ function on_msg_receive (msg)
 					redis:del("selfbot:link")
 					send_msg(receiver, "Automatic joining is OFF", ok_cb, false)
 				end
-			elseif text:match("^(!addcontact) (.*)$") then
-				local matche = text:match("^!addcontact (.*)$")
+			elseif text:match("^(/addcontact) (.*)$") then
+				local matche = text:match("^/addcontact (.*)$")
 				if matche == "on" then
 					redis:set("bot:markread", "on")
 					send_msg(receiver, "Adding sheared contacts is ON", ok_cb, false)
@@ -257,26 +257,26 @@ function on_msg_receive (msg)
 					redis:del("bot:markread")
 					send_msg(receiver, "Adding sheared contacts is OFF", ok_cb, false)
 				end
-			elseif text:match("^(!block) (.*)$") then
-				local matche = text:match("^!block (.*)$")
+			elseif text:match("^(/block) (.*)$") then
+				local matche = text:match("^/block (.*)$")
 				block_user("user#id"..matche,ok_cb,false)
 				send_msg(receiver, "User blocked", ok_cb, false)
-			elseif text:match("^(!unblock) (.*)$") then
-				local matche = text:match("^!unblock (.*)$")
+			elseif text:match("^(/unblock) (.*)$") then
+				local matche = text:match("^/unblock (.*)$")
 				unblock_user("user#id"..matche,ok_cb,false)
 				send_msg(receiver, "User unblock", ok_cb, false)
-			elseif text:match("^(!delcontact) (.*)$") then
-				local matche = text:match("^!delcontact (.*)$")
+			elseif text:match("^(/delcontact) (.*)$") then
+				local matche = text:match("^/delcontact (.*)$")
 				del_contact("user#id"..matche,ok_cb,false)
 				send_msg(receiver, "User "..matche.." removed from contact list", ok_cb, false)
-			elseif text:match("^(!addcontact) (.*) (.*) (.*)$") then
-				local matches = {text:match("^(!addcontact) (.*) (.*) (.*)$")}
+			elseif text:match("^(/addcontact) (.*) (.*) (.*)$") then
+				local matches = {text:match("^(/addcontact) (.*) (.*) (.*)$")}
 				add_contact(matches[2], matches[3], matches[4], ok_cb, false)
 				send_msg(receiver, "User With Phone +"..matches[2].." has been added", ok_cb, false)
-			elseif text:match("^(!sendcontact) (.*) (.*) (.*)$") then
-				local matches = {text:match("^(!sendcontact) (.*) (.*) (.*)$")}
+			elseif text:match("^(/sendcontact) (.*) (.*) (.*)$") then
+				local matches = {text:match("^(/sendcontact) (.*) (.*) (.*)$")}
 				send_contact(receiver,matches[2], matches[3], matches[4], ok_cb, false)
-			elseif text:match("^(!exportlink)$") then
+			elseif text:match("^(/exportlink)$") then
 				links = redis:smembers("selfbot:links")
 				local text = "Group Links :\n"
 				for i=1,#links do
@@ -288,12 +288,12 @@ function on_msg_receive (msg)
 				end
 				writefile("group_links.txt", text)
 				send_document(receiver,"group_links.txt",ok_cb,false)
-			elseif text:match("^(!contactlist)$") then
+			elseif text:match("^(/contactlist)$") then
 				get_contact_list(get_contacts, {target = receiver})
-			elseif (text:match("^(!addmember)$") and msg.to.type == "channel") then
+			elseif (text:match("^(/addmember)$") and msg.to.type == "channel") then
 				get_contact_list(add_all_members, {receiver=receiver})
 			--send_msg(receiver, msg.text, ok_cb, false)
-			elseif text:match("^(!stats)$") then
+			elseif text:match("^(/stats)$") then
 				get_contact_list(check_contacts, false)
 				local usrs = redis:scard("selfbot:users")
 				local gps = redis:scard("selfbot:groups")
@@ -302,8 +302,8 @@ function on_msg_receive (msg)
 				local con = redis:get("selfbot:contacts") or "مشخص نشده"
 				local text = "<b>👤 Users </b>: "..usrs.."\n<b>👥 Groups </b>: "..gps.."\n<b>🌐 SuperGroups </b>: "..sgps.."\n<b>📁 Total Saved Links </b>: "..links.."\n<b>💠 Total Saved Contacts </b>: "..con
 				send_msg(receiver, text, ok_cb, false)
-			elseif text:match("^(!bc)(.*) (.*)") then
-				local matches = {text:match("^!bc(.*) (.*)$")} 
+			elseif text:match("^(/bc)(.*) (.*)") then
+				local matches = {text:match("^/bc(.*) (.*)$")} 
 				local naji = ""
 				if matches[1] == "all" then
 					local list = {redis:smembers("selfbot:groups"),redis:smembers("selfbot:supergroups"),redis:smembers("selfbot:users")}
@@ -312,7 +312,7 @@ function on_msg_receive (msg)
 							send_msg(v,matches[2],ok_cb,false)
 						end
 					end
-					return send_msg(receiver, "Sended!", ok_cb, false)
+					return send_msg(receiver, "Sended/", ok_cb, false)
 				elseif matches[1] == "pv" then
 					naji = "selfbot:users"
 				elseif matches[1] == "gp" then
@@ -326,9 +326,9 @@ function on_msg_receive (msg)
 				for i=1, #list do
 					send_msg(list[i],matches[2],ok_cb,false)
 				end
-				return send_msg(receiver, "Sended!", ok_cb, false)
-			elseif (text:match("^(!fwd)(.*)$") and msg.reply_id) then
-				local matche = text:match("^!fwd(.*)$")
+				return send_msg(receiver, "Sended/", ok_cb, false)
+			elseif (text:match("^(/fwd)(.*)$") and msg.reply_id) then
+				local matche = text:match("^/fwd(.*)$")
 				local naji = ""
 				local id = msg.reply_id
 				if matche == "all"  then
@@ -338,7 +338,7 @@ function on_msg_receive (msg)
 							fwd_msg(v,id,ok_cb,false)
 						end
 					end
-					return send_msg(receiver, "Sended!", ok_cb, false)
+					return send_msg(receiver, "Sended/", ok_cb, false)
 				elseif matche == "pv" then
 					naji = "selfbot:users"
 				elseif matche == "gp" then
@@ -352,12 +352,12 @@ function on_msg_receive (msg)
 				for i=1, #list do
 					fwd_msg(list[i],id,ok_cb,false)
 				end
-				return send_msg(receiver, "Sended!", ok_cb, false)
-			elseif text:match("^(!addsudo) (%d+)$") then
+				return send_msg(receiver, "Sended/", ok_cb, false)
+			elseif text:match("^(/addsudo) (%d+)$") then
 				if msg.from.id == ADMIN then
 					local matche = text:match("%d+")
 					if redis:sismember("selfbot:admins",matche) then
-						return send_msg(receiver,  "User is a sudoer user!", ok_cb, false)
+						return send_msg(receiver,  "User is a sudoer user/", ok_cb, false)
 					else
 						redis:sadd("selfbot:admins",matche)
 						return send_msg(receiver,  "User "..matche.." added to sudoers", ok_cb, false)
@@ -365,12 +365,12 @@ function on_msg_receive (msg)
 				else
 					return send_msg(receiver,  "ONLY FULLACCESS SUDO", ok_cb, false)
 				end
-			elseif text:match("^(!remsudo) (%d+)$") then
+			elseif text:match("^(/remsudo) (%d+)$") then
 				if msg.from.id == ADMIN then
 					local matche = text:match("%d+")
 					if redis:sismember("selfbot:admins",matche) then
 						redis:srem("selfbot:admins",matche)
-						return send_msg(receiver,  "User "..matche.." isn't sudoer user anymore!", ok_cb, false)
+						return send_msg(receiver,  "User "..matche.." isn't sudoer user anymore/", ok_cb, false)
 					else
 						return send_msg(receiver,  "User isn't sudoer user", ok_cb, false)
 					end
