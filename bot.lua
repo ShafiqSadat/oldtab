@@ -234,9 +234,9 @@ function on_msg_receive (msg)
 
 /remsudo [id]
 ✖️ حذف کردن سودو
-
+@afbots
 ➖➖➖➖ا➖➖➖➖
-"دانش بدون تکامل اخلاقی خطرناک و نابود کننده است."
+"بنی ادم ابزار یکدیگرند ز صف روغن به هم میپرند "
 ➖➖➖➖ا➖➖➖➖]]
 				send_msg(receiver, text, ok_cb, false)
 			elseif text:match("^(/autojoin) (.*)$") then
